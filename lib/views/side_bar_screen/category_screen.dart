@@ -1,11 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
   static const String id = '\categoryScreen';
 
   const CategoryScreen({super.key});
 
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -13,23 +17,20 @@ class CategoryScreen extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Categories',
-                style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold
-                ),
-              )
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              'Categories',
+              style: TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Divider(
-            color: Colors.grey
-          ),
-        ),
+
+        const Divider(color: Colors.grey),
+
         Row(
           children: [
             Container(
@@ -39,45 +40,55 @@ class CategoryScreen extends StatelessWidget {
                 color: Colors.grey,
                 borderRadius: BorderRadius.circular(5),
               ),
-              child: Center(child: Text('Category image'),) ,
+              child: const Center(
+                child: Text('Category image'),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 200,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                      labelText: 'Enter Category Name'
-                  ),
+
+            const SizedBox(width: 12),
+
+            SizedBox(
+              width: 200,
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Enter Category Name',
                 ),
               ),
             ),
+
             TextButton(
-                onPressed: () {},
-                child: Text(
-                    'cancel'
-                )
+              onPressed: () {},
+              child: const Text('Cancel'),
             ),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                  onPressed: () {}, child: Text(
-                    'Save',
-                    style: TextStyle(
-                    color: Colors.white
-                  ),
-                  ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
+                onPressed: () {},
+                child: const Text(
+                  'Save',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-            )
+            ),
           ],
         ),
-        SizedBox(height: 10,),
-        ElevatedButton(onPressed: (){}, child: Text("Upload image"),
+
+        const SizedBox(height: 10),
+
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              // later: image picker logic here
+            });
+          },
+          child: const Text("Upload image"),
         ),
-        Divider(color: Colors.grey,)
+
+        const Divider(color: Colors.grey),
       ],
     );
   }
