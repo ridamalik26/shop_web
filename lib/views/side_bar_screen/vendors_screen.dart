@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class VendorsScreen extends StatelessWidget {
+  static const String id = '\vendorsScreen';
   const VendorsScreen({super.key});
 
   @override
