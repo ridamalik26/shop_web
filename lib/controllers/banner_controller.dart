@@ -33,4 +33,14 @@ class BannerController{
       print(e);
     }
   }
+
+  //fetch banners
+  Future<List<BannerModel>> loadBanners () async{
+    try{
+      await http.get(Uri.parse('$uri'))
+    } catch(e) {
+
+    }
+  }
+
 }
