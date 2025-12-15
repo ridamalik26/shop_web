@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:shop_web/controllers/banner_controller.dart';
 
 class UploadBannerScreen extends StatefulWidget {
   static const String id = '/BannersScreen';
@@ -11,6 +12,7 @@ class UploadBannerScreen extends StatefulWidget {
 }
 
 class _UploadBannerScreenState extends State<UploadBannerScreen> {
+  final BannerController _bannerController = BannerController();
   dynamic _image;
 
   pickImage() async {
@@ -67,7 +69,10 @@ class _UploadBannerScreenState extends State<UploadBannerScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(onPressed: (){}, child: Text('Save'),),
+              child: ElevatedButton(onPressed: () async{
+                await _bannerController.uploadBanner(pickedImage: _image, context: context);
+              },
+                child: Text('Save'),),
             ),
           ],
         ),
@@ -77,7 +82,9 @@ class _UploadBannerScreenState extends State<UploadBannerScreen> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
-            onPressed: pickImage,
+            onPressed: (){
+              pickImage();
+            },
             child: const Text("Pick Image"),
           ),
         ),
