@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:shop_web/controllers/banner_controller.dart';
+import 'package:shop_web/views/side_bar_screen/banner_widget.dart';
 
 class UploadBannerScreen extends StatefulWidget {
   static const String id = '/BannersScreen';
@@ -88,6 +89,8 @@ class _UploadBannerScreenState extends State<UploadBannerScreen> {
             child: const Text("Pick Image"),
           ),
         ),
+        Divider(color: Colors.grey,),
+        BannerWidget(),
       ],
     );
   }
