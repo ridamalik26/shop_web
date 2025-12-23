@@ -6,6 +6,7 @@ import 'package:shop_web/views/side_bar_screen/buyers_screen.dart';
 import 'package:shop_web/views/side_bar_screen/category_screen.dart';
 import 'package:shop_web/views/side_bar_screen/orders_screen.dart';
 import 'package:shop_web/views/side_bar_screen/products_screen.dart';
+import 'package:shop_web/views/side_bar_screen/subcategory_screen.dart';
 import 'package:shop_web/views/side_bar_screen/upload_banner_screen.dart';
 import 'package:shop_web/views/side_bar_screen/vendors_screen.dart';
 
@@ -38,12 +39,19 @@ class _MainScreenState extends State<MainScreen> {
         break;
       case CategoryScreen.id:
         setState(() {
-          _selectedScreen = CategoryScreen();
+          _selectedScreen = const CategoryScreen();
         });
         break;
+
+      case SubcategoryScreen.id:
+        setState(() {
+          _selectedScreen = const SubcategoryScreen();
+        });
+        break;
+
       case UploadBannerScreen.id:
         setState(() {
-          _selectedScreen = UploadBannerScreen();
+          _selectedScreen = const UploadBannerScreen();
         });
         break;
       case ProductsScreen.id:
@@ -82,8 +90,10 @@ class _MainScreenState extends State<MainScreen> {
         AdminMenuItem(title: 'Categories', route: CategoryScreen.id ,icon: Icons.category),
         AdminMenuItem(title: 'Upload Banners', route: UploadBannerScreen.id ,icon: CupertinoIcons.add),
         AdminMenuItem(title: 'Product', route: ProductsScreen.id ,icon: Icons.store),
+          AdminMenuItem(title: 'Subcategories', route: SubcategoryScreen.id ,icon: Icons.category_outlined),
 
-      ], selectedRoute: '',
+
+        ], selectedRoute: '',
         onSelected: (item){
           screenSelector(item);
         },

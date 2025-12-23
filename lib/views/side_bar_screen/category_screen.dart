@@ -4,7 +4,7 @@ import 'package:shop_web/controllers/category_controller.dart';
 import 'package:shop_web/views/side_bar_screen/widgets/category_widget.dart';
 
 class CategoryScreen extends StatefulWidget {
-  static const String id = '\categoryScreen';
+  static const String id = 'categoryScreen';
 
   const CategoryScreen({super.key});
 
@@ -67,7 +67,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
               ),
             ),
         
-            const Divider(color: Colors.grey),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: const Divider(color: Colors.grey),
+            ),
         
             Row(
               children: [
