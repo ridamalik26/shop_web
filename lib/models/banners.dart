@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class BannerModel {
   final String id;
   final String image;
@@ -9,21 +7,18 @@ class BannerModel {
     required this.image,
   });
 
-  // convert model → Map
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'id': id,
-      'image': image,
+  /// Convert BannerModel → Map (USED FOR API POST)
+  Map<String, dynamic> toJson() {
+    return {
+      "image": image,
     };
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory BannerModel.fromJson(Map<String, dynamic> map) {
+  /// Convert Map → BannerModel (USED FOR API GET)
+  factory BannerModel.fromJson(Map<String, dynamic> json) {
     return BannerModel(
-      id: map['_id'] as String,
-      image: map['image'] as String,
+      id: json['_id'] ?? '',
+      image: json['image'] ?? '',
     );
   }
-
 }
