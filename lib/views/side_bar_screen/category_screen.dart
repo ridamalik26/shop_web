@@ -177,6 +177,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             ),
         
             const Divider(color: Colors.grey),
+
             CategoryWidget(),
           ],
         ),

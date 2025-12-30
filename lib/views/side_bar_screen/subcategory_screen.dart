@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_web/controllers/category_controller.dart';
+import 'package:shop_web/controllers/subcategory_controller.dart';
 import 'package:shop_web/models/category.dart';
 
 class SubcategoryScreen extends StatefulWidget {
@@ -13,10 +14,12 @@ class SubcategoryScreen extends StatefulWidget {
 }
 
 class _SubcategoryScreenState extends State<SubcategoryScreen> {
+  final SubCategoryController subCategoryController = SubCategoryController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final CategoryController _categoryController = CategoryController();
   late Future<List<Category>> futureCategories;
+  late String name;
 
   Category? selectedCategory;
   String subCategoryName = '';
@@ -49,7 +52,7 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// Title
+          /// TITLE
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
@@ -63,7 +66,7 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
 
           const Divider(color: Colors.grey),
 
-          /// Category dropdown
+          /// CATEGORY DROPDOWN
           FutureBuilder<List<Category>>(
             future: futureCategories,
             builder: (context, snapshot) {
@@ -97,11 +100,13 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
             },
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
 
-          /// Image picker + name field
+          /// IMAGE + TEXTFIELD + BUTTONS (SAME ROW)
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// IMAGE PICKER
               GestureDetector(
                 onTap: pickImage,
                 child: Container(
@@ -121,6 +126,7 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
 
               const SizedBox(width: 20),
 
+              /// SUBCATEGORY NAME
               SizedBox(
                 width: 250,
                 child: TextFormField(
@@ -138,73 +144,66 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
                   },
                 ),
               ),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          /// Buttons
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _image = null;
-                    subCategoryName = '';
-                    selectedCategory = null;
-                  });
-                },
-                child: const Text('Cancel'),
-              ),
 
               const SizedBox(width: 20),
 
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+              /// CANCEL BUTTON
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _image = null;
+                      subCategoryName = '';
+                      selectedCategory = null;
+                    });
+                  },
+                  child: const Text('Cancel'),
                 ),
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) return;
+              ),
 
-                  if (selectedCategory == null) {
+              const SizedBox(width: 10),
+
+              /// SAVE BUTTON
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  onPressed: () {
+                    if (!_formKey.currentState!.validate()) {
+                      subCategoryController.uploadSubCategory(categoryId: selectedCategory!.id, categoryName: selectedCategory!.name, subCategoryName: name, pickedImage: _image, context: context);
+                    };
+
+                    if (selectedCategory == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please select a category'),
+                        ),
+                      );
+                      return;
+                    }
+
+                    if (_image == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please pick an image'),
+                        ),
+                      );
+                      return;
+                    }
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Please select a category'),
+                        content: Text('Subcategory is saved'),
                       ),
                     );
-                    return;
-                  }
-
-                  if (_image == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please pick an image'),
-                      ),
-                    );
-                    return;
-                  }
-
-                  // 🔴 CONTROLLER NOT CREATED YET
-                  // Uncomment when SubCategoryController is ready
-                  /*
-                  await _subCategoryController.uploadSubCategory(
-                    categoryId: selectedCategory!.id,
-                    categoryName: selectedCategory!.name,
-                    subCategoryName: subCategoryName,
-                    pickedImage: _image,
-                    context: context,
-                  );
-                  */
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Subcategory ready to be saved'),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Save',
-                  style: TextStyle(color: Colors.white),
+                  },
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ],
