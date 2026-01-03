@@ -21,8 +21,8 @@ class SubCategoryController {
     try {
       // 🔹 Cloudinary instance
       final cloudinary = CloudinaryPublic(
-        'ducobtxxe',        // your cloud name
-        'ymg0fxf2',         // your upload preset
+        'dirmrl8zi',        // your cloud name
+        'sub_category_preset',         // your upload preset
       );
 
       // 🔹 Upload image to Cloudinary

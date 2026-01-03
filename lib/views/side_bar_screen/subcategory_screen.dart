@@ -19,7 +19,7 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
 
   final CategoryController _categoryController = CategoryController();
   late Future<List<Category>> futureCategories;
-  late String name;
+  String? name;
 
   Category? selectedCategory;
   String subCategoryName = '';
@@ -64,7 +64,10 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
             ),
           ),
 
-          const Divider(color: Colors.grey),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: const Divider(color: Colors.grey),
+          ),
 
           /// CATEGORY DROPDOWN
           FutureBuilder<List<Category>>(
@@ -172,9 +175,9 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
                     backgroundColor: Colors.blue,
                   ),
                   onPressed: () {
-                    if (!_formKey.currentState!.validate()) {
-                      subCategoryController.uploadSubCategory(categoryId: selectedCategory!.id, categoryName: selectedCategory!.name, subCategoryName: name, pickedImage: _image, context: context);
-                    };
+                    if (_formKey.currentState!.validate()) {
+                      subCategoryController.uploadSubCategory(categoryId: selectedCategory!.id, categoryName: selectedCategory!.name, subCategoryName: subCategoryName, pickedImage: _image, context: context);
+                    }
 
                     if (selectedCategory == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
