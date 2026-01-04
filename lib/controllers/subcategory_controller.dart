@@ -49,11 +49,10 @@ class SubCategoryController {
       // 🔹 Send to backend
       http.Response response = await http.post(
         Uri.parse('$uri/api/subcategories'),
-        body: subcategory.toJson(),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(subcategory.toMap()),
       );
+
 
       manageHttpResponse(
         response: response,

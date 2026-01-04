@@ -26,7 +26,6 @@ class Subcategory {
     };
   }
 
-  /// Convert Subcategory → JSON String
   String toJson() => json.encode(toMap());
 
   /// Convert Map → Subcategory

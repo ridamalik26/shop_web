@@ -1,11 +1,11 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_web/controllers/category_controller.dart';
-import 'package:shop_web/controllers/subcategory_controller.dart';
-import 'package:shop_web/models/category.dart';
+
+import '../../models/category.dart';
 
 class SubcategoryScreen extends StatefulWidget {
-  static const String id = 'subCategoryScreen';
+  static const String id = 'SubcategoryScreen';
 
   const SubcategoryScreen({super.key});
 
@@ -14,25 +14,19 @@ class SubcategoryScreen extends StatefulWidget {
 }
 
 class _SubcategoryScreenState extends State<SubcategoryScreen> {
-  final SubCategoryController subCategoryController = SubCategoryController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final CategoryController _categoryController = CategoryController();
+  late String name;
   late Future<List<Category>> futureCategories;
-  String? name;
-
   Category? selectedCategory;
-  String subCategoryName = '';
-  dynamic _image;
 
   @override
   void initState() {
     super.initState();
-    futureCategories = _categoryController.loadCategories();
+    futureCategories = CategoryController().loadCategories();
   }
+  dynamic _image;
 
-  /// Pick image
-  Future<void> pickImage() async {
+  pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
       allowMultiple: false,
@@ -44,7 +38,6 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -52,156 +45,116 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// TITLE
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Subcategories',
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                'Subcategories',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-
+      
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: const Divider(color: Colors.grey),
           ),
-
-          /// CATEGORY DROPDOWN
+      
           FutureBuilder<List<Category>>(
             future: futureCategories,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No Category'));
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: DropdownButton<Category>(
-                    isExpanded: true,
-                    hint: const Text('Select Category'),
-                    value: selectedCategory,
-                    items: snapshot.data!.map((Category category) {
-                      return DropdownMenuItem<Category>(
-                        value: category,
-                        child: Text(category.name),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCategory = value;
-                      });
-                    },
-                  ),
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+              else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text('No Category'),
+                );
+              }
+              else {
+                return DropdownButton<Category>(
+                  hint: const Text('Select Category'),
+                  value: selectedCategory,
+                  items: snapshot.data!.map((Category category) {
+                    return DropdownMenuItem<Category>(
+                      value: category,
+                      child: Text(category.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategory = value;
+                    });
+                    print(selectedCategory!.name);
+                  },
                 );
               }
             },
           ),
-
-          const SizedBox(height: 20),
-
-          /// IMAGE + TEXTFIELD + BUTTONS (SAME ROW)
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// IMAGE PICKER
-              GestureDetector(
-                onTap: pickImage,
-                child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: _image != null
-                        ? Image.memory(_image, fit: BoxFit.cover)
-                        : const Text('Pick Image'),
-                  ),
+              Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Center(
+                  child: _image != null
+                      ? Image.memory(_image)
+                      : Text('SubCategory image'),
                 ),
               ),
-
-              const SizedBox(width: 20),
-
-              /// SUBCATEGORY NAME
-              SizedBox(
-                width: 250,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Subcategory Name',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter subcategory name';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    subCategoryName = value;
-                  },
-                ),
-              ),
-
-              const SizedBox(width: 20),
-
-              /// CANCEL BUTTON
+      
               Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _image = null;
-                      subCategoryName = '';
-                      selectedCategory = null;
-                    });
-                  },
-                  child: const Text('Cancel'),
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 200,
+                  child: TextFormField(
+                    onChanged: (value) {
+                      name = value;
+                    },
+                    validator: (value) {
+                      if (value!.isNotEmpty) {
+                        return null;
+                      } else {
+                        return 'Please Enter subcategory Name';
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Enter Subcategory Name',
+                    ),
+                  ),
                 ),
               ),
-
-              const SizedBox(width: 10),
-
-              /// SAVE BUTTON
+      
+              TextButton(
+                onPressed: () {},
+                child: const Text('Cancel'),
+              ),
+      
               Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      subCategoryController.uploadSubCategory(categoryId: selectedCategory!.id, categoryName: selectedCategory!.name, subCategoryName: subCategoryName, pickedImage: _image, context: context);
-                    }
 
-                    if (selectedCategory == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please select a category'),
-                        ),
-                      );
-                      return;
                     }
-
-                    if (_image == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please pick an image'),
-                        ),
-                      );
-                      return;
-                    }
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Subcategory is saved'),
-                      ),
-                    );
                   },
                   child: const Text(
                     'Save',
@@ -211,6 +164,17 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () {
+                pickImage();
+              },
+              child: Text('Pick Image'),
+            ),
+          ),
+
+          const Divider(color: Colors.grey),
         ],
       ),
     );
