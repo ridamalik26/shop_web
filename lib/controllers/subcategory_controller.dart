@@ -11,30 +11,20 @@ import '../services/manage_http_response.dart';
 class SubCategoryController {
 
   /// 🔹 UPLOAD SUBCATEGORY
-  Future<void> uploadSubCategory({
+  Future<void> uploadSubcategory({
     required String categoryId,
     required String categoryName,
     required String subCategoryName,
     required dynamic pickedImage,
-    required BuildContext context,
+    required context,
   }) async {
-    try {
-      // 🔹 Cloudinary instance
-      final cloudinary = CloudinaryPublic(
-        'dirmrl8zi',        // your cloud name
-        'sub_category_preset',         // your upload preset
-      );
+    try{
+      final cloudinary = CloudinaryPublic("dirmrl8zi", 'category_preset');
 
-      // 🔹 Upload image to Cloudinary
-      CloudinaryResponse imageResponse =
-      await cloudinary.uploadFile(
-        CloudinaryFile.fromBytesData(
-          pickedImage,
-          identifier: 'subcategoryImage',
-          folder: 'subcategoryImages',
-        ),
+      CloudinaryResponse imageResponse = await cloudinary.uploadFile(
+        CloudinaryFile.fromBytesData(pickedImage,
+            identifier: 'pickedImage', folder: 'categoryImages'),
       );
-
       String image = imageResponse.secureUrl;
 
       // 🔹 Create model
@@ -48,9 +38,11 @@ class SubCategoryController {
 
       // 🔹 Send to backend
       http.Response response = await http.post(
-        Uri.parse('$uri/api/subcategories'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(subcategory.toMap()),
+        Uri.parse("$uri/api/subcategories"),
+        body: subcategory.toJson(),
+        headers: <String, String>{
+          "Content-Type": 'application/json; charset=UTF-8'
+        },
       );
 
 
