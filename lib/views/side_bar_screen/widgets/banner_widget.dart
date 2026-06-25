@@ -15,7 +15,6 @@ class _BannerWidgetState extends State<BannerWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     futureBanners = BannerController().loadBanners();
   }

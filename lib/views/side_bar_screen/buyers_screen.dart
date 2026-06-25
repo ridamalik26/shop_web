@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shop_web/views/side_bar_screen/widgets/buyer_widget.dart';
 
 class BuyersScreen extends StatelessWidget {
   static const String id = '\buyersScreen';
@@ -57,7 +58,8 @@ class BuyersScreen extends StatelessWidget {
                 _rowHeader(2, 'Address'),
                 _rowHeader(1, 'Delete'),
               ],
-            )
+            ),
+            BuyerWidget(),
           ],
         ),
       ),
